@@ -16,14 +16,14 @@ const main = async () => {
         path_index: path.path_index,
     }
 
-    const witness = await circuit.calculateWitness(circuitInputs)
+    const witness = await circuit.calculateWitness(circuitInputs, true)
     await circuit.checkConstraints(witness)
     await circuit.loadSymbols()
     console.log('circuit_works.json is OK')
 
     try {
         const circuit2 = await circom.tester('./circuit_bad.circom')
-        const witness = await circuit2.calculateWitness(circuitInputs)
+        const witness = await circuit2.calculateWitness(circuitInputs, true)
         await circuit2.checkConstraints(witness)
     } catch (e) {
         console.log('circuit_bad.json is not OK')
@@ -32,7 +32,7 @@ const main = async () => {
 
     const simpleCircuit = await circom.tester('./circuit_simple.circom')
     try {
-        const witness = await simpleCircuit.calculateWitness({})
+        const witness = await simpleCircuit.calculateWitness({}, true)
         await simpleCircuit.checkConstraints(witness)
         await simpleCircuit.loadSymbols()
     } catch (e) {
